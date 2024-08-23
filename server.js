@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const shortid = require('shortid');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect('mongodb://localhost:27017/urlShortener', {
     useNewUrlParser: true,
@@ -38,6 +40,10 @@ app.get('/:shortCode', async (req, res) => {
     } else {
         res.status(404).send('URL not found');
     }
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
